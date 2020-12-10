@@ -1,0 +1,26 @@
+<Project>
+  <ItemGroup>
+    <FeatureFlag Include="AT_LEAST_NET_5_0" MinimumTargetFrameworks="net50" />
+    <FeatureFlag Include="SUPPORTS_ECDSA" MinimumTargetFrameworks="netstandard1.6;net47" />
+    <FeatureFlag Include="SUPPORTS_GENERIC_HOST" MinimumTargetFrameworks="netcoreapp2.2;netstandard2.1" />
+    <FeatureFlag Include="SUPPORTS_SERVICE_PROVIDER_IN_HTTP_MESSAGE_HANDLER_BUILDER" MinimumTargetFrameworks="netcoreapp2.2;netstandard2.1" />
+    <FeatureFlag Include="SUPPORTS_CERTIFICATE_HASHING_WITH_SPECIFIED_ALGORITHM" MinimumTargetFrameworks="netcoreapp2.1;netstandard2.1;net48" />
+  </ItemGroup>
+
+  <!--
+    Use BeforeCompile here (instead of e.g. CoreCompile) so that the consants
+    are picked up by _GenerateCompileDependencyCache and and incremental compilation
+    picks up changes to the FeatureFlag items.
+  -->
+  <Target Name="CreateFeatureFlagCompilerConstants" BeforeTargets="BeforeCompile">
+    <ItemGroup>
+      <_FeatureFlagsByMinimumTargetFramework Include="%(FeatureFlag.MinimumTargetFrameworks)" 
+                                             FeatureFlag="@(FeatureFlag)" />
+      <_FeatureFlagsByMinimumTargetFramework Compatible="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)','%(Identity)'))" />
+      <_CompatibleFeatureFlags Include="@(_FeatureFlagsByMinimumTargetFramework->WithMetadataValue('Compatible','True')->'%(FeatureFlag)'->Distinct())" />
+    </ItemGroup>
+    <PropertyGroup>
+      <DefineConstants>$(DefineConstants);@(_CompatibleFeatureFlags)</DefineConstants>
+    </PropertyGroup>
+  </Target>
+</Project>

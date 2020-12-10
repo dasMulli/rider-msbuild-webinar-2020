@@ -1,0 +1,25 @@
+<Project>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
+    <SelfContained>True</SelfContained>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishSingleFile>True</PublishSingleFile>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">   
+    <IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
+
+    <!--
+      All of these properties can include content in the generated .exe but cause extraction at startup:
+        IncludeNativeLibrariesForSelfExtract
+        IncludeAllContentForSelfExtract
+        IncludeSymbolsInSingleFile
+
+      More Info: https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file
+    -->
+  </PropertyGroup>
+
+</Project>

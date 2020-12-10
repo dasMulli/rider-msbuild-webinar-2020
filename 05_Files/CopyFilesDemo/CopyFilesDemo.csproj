@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="*.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\SharedFiles\**\*.txt" LinkBase="TextFiles" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+
+    <!--
+      CopyToOutputDirectory / CopyToPublishDirectory:
+       * Never
+       * PreserveNewest
+       * Always <- Avoid, prevents any VS incremental build optimization
+    -->
+
+    <!--
+    Non-SDK projects:
+    Link="TextFiles\%(RecursiveDir)%(Filename)%(Extension)"
+    -->
+
+    <!--
+    "None" correlates to the build action.
+    Others are:
+    * Compile
+    * EmbeddedResource
+    * Content
+    -->
+
+    <!--
+    Visible="false" hides the items in Solution Explorer
+    -->
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="project-local-file.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,40 @@
+<Project>
+
+  <!-- Imagine this being imported from a different file, say common.props -->
+
+  <ItemGroup Condition="'$(EnableDefaultGreetItems)' == 'True'">
+    <GreetFile Include="*.greet.txt" />
+  </ItemGroup>
+
+  <!-- This could be the main body of your project -->
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <GreetFile Remove="martin.greet.txt" />
+    <EmbeddedResource Include="martin.greet.txt" />
+    <GreetFile Update="christina.greet.txt" Enabled="False" />
+  </ItemGroup>
+
+  <!-- Imagine this to be imported from a differnt file, say common.targtes -->
+
+  <ItemDefinitionGroup>
+    <GreetFile Enabled="True" />
+  </ItemDefinitionGroup>
+
+  <PropertyGroup>
+    <EnableDefaultGreetItems Condition="'$(EnableDefaultGreetItems)' == ''">True</EnableDefaultGreetItems>
+  </PropertyGroup>
+
+  <Target Name="Greet">
+    <ReadLinesFromFile File="%(GreetFile.Identity)" Condition="'%(GreetFile.Enabled)' == 'True'">
+      <Output TaskParameter="Lines" ItemName="Greeting" />
+    </ReadLinesFromFile>
+
+    <Message Text="@(Greeting, '%0A')" Importance="high" />
+
+    <Message Text="Used Greetings from: %0A@(GreetFile->WithMetadataValue('Enabled','True')->'* %(FullPath) - %(ModifiedTime)', '%0A')" Importance="high" />
+  </Target>
+</Project>

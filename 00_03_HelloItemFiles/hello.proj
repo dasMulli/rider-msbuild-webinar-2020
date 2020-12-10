@@ -1,0 +1,21 @@
+<Project>
+
+  <ItemGroup>
+    <GreetFile Include="*.greet.txt" />
+  </ItemGroup>
+
+  <Target Name="Greet">
+    <ReadLinesFromFile File="%(GreetFile.Identity)">
+      <Output TaskParameter="Lines" ItemName="Greeting" />
+    </ReadLinesFromFile>
+
+    <Message Text="@(Greeting, '%0A')" Importance="high" />
+
+    <Message Text="Used Greetings from: %0A@(GreetFile->'* %(FullPath) - %(ModifiedTime)', '%0A')" Importance="high" />
+
+    <!--
+    "Well-known metadata"
+    https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-well-known-item-metadata
+    -->
+  </Target>
+</Project>

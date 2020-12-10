@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <Version>1.2.3</Version>
+    <Authors>Martin Ullrich</Authors>
+    <Company>$(Authors)</Company>
+  </PropertyGroup>
+</Project>

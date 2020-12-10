@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Version>1.2.3-beta4</Version>
+  </PropertyGroup>
+
+  <Target Name="PrintPatchVersion" BeforeTargets="BeforeBuild">
+    <GetVersionParts Version="$(Version)">
+      <Output TaskParameter="Major" PropertyName="MajorVersion" />
+      <Output TaskParameter="Minor" PropertyName="MinorVersion" />
+      <Output TaskParameter="Build" PropertyName="BuildVersion" />
+      <Output TaskParameter="Revision" PropertyName="RevisionVersion" />
+    </GetVersionParts>
+    
+    <Message Text="Major: $(MajorVersion)" Importance="high" />
+    <Message Text="Minor: $(MinorVersion)" Importance="high" />
+    <Message Text="Build: $(BuildVersion)" Importance="high" />
+    <Message Text="Revision: $(RevisionVersion)" Importance="high" />
+  </Target>
+
+  <UsingTask  
+    TaskName="GetVersionParts"  
+    TaskFactory="RoslynCodeTaskFactory"  
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" >  
+    <ParameterGroup>
+      <Version ParameterType="System.String" Required="true" />
+      <Major ParameterType="System.Int32" Output="true" />
+      <Minor ParameterType="System.Int32" Output="true" />
+      <Build ParameterType="System.Int32" Output="true" />
+      <Revision ParameterType="System.Int32" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        var version = System.Version.Parse(Version.Split('-','+')[0]);
+        Major = version.Major;
+        if (Major < 0) {
+            Major = 0;
+        }
+        Minor = version.Minor;
+        if (Minor < 0) {
+            Minor = 0;
+        }
+        Build = version.Build;
+        if (Build < 0) {
+            Build = 0;
+        }
+        Revision = version.Revision;
+        if (Revision < 0) {
+            Revision = 0;
+        }
+        ]]>  
+      </Code>
+    </Task>  
+  </UsingTask>  
+
+</Project>

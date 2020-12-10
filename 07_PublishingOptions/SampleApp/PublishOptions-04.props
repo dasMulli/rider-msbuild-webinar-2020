@@ -1,0 +1,19 @@
+<Project>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
+    <SelfContained>True</SelfContained>
+    <PublishTrimmed>True</PublishTrimmed>
+    <TrimMode>copyused</TrimMode>
+    <!--
+    <TrimMode>link</TrimMode>
+    -->
+  </PropertyGroup>
+
+  <!--
+    Consult https://docs.microsoft.com/en-us/dotnet/core/deploying/trimming-options
+    for more details on config options and how to deal with warninigs.
+    You may need to set up configurations for assemblies or types that you need.
+    Do test the output thoroughly.
+  -->
+
+</Project>
